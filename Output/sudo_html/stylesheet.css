@@ -1,0 +1,12 @@
+.cell:nth-child(3n+1){
+  clear:both;
+}
+
+.cell input {
+  text-align: center;
+  font-size: 30px;
+  width:40px;
+  height:40px;
+  display:block;
+  border: 1px solid black;
+}

@@ -1,0 +1,21 @@
+#c0 {
+	background-color : #222222 ;
+}
+
+#c1 {
+	background-color : #888888 ;
+}
+
+#c2 {
+	background-color : #EEEEEE ;
+}
+
+td {
+	width : 20px ;
+	height : 20px ;
+	border : 1px solid black ;
+}
+
+table ,td ,th {
+	align : center ;
+}
