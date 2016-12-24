@@ -1,5 +1,7 @@
 #include "NonogramSolver.h"
 
+using namespace std;
+
 int main(){
 	ifstream fin("Input/sample_in.txt") ;
 
