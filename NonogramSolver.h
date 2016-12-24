@@ -188,7 +188,7 @@ struct NonogramSolver {
 			for (int i=1 ;i<left_most[0].L ;i++ ){
 				if (line[i]==full)return 0 ;
 			}
-		
+			
 			for (int i=0 ;i<(int)left_most.size() ;i++ ){
 				if (left_most[i].L>right_most[i].L)
 					return 0 ;
@@ -279,90 +279,90 @@ struct NonogramSolver {
 		fout <<endl << cntCol <<" x " << cntRow <<endl ; 
 		for (int i=1 ;i<=cntCol ;i++ ) fout << "  _" ; fout <<endl ;
 
-		for (int i=1 ;i<=cntRow ;i++ ){
-			for (int j=1 ;j<=cntCol ;j++ ){
-				fout <<"  " ;
-				if ( Row[i][j]==empty  )
-					fout <<"X" ;
-				else if ( Row[i][j]==full )
-					fout <<"O" ;
-				else 
-					fout <<" " ;
-			}
-			for (auto r : Row[i].left_most ){
-				fout << "|" << setw(3) << r.len <<" " ;
-			}
-			fout <<endl ;
-		}
-		
-		for (int i=1 ;i<=cntCol ;i++ ) fout << "  _" ; fout <<endl ;
-
-		for (int i=0 ; ;i++ ){
-			bool outed=0 ;
-			for (int j=1 ;j<=cntCol ;j++ ){
-				if ((int)Col[j].left_most.size()>i ){
-					fout << setw(3) << Col[j].left_most[i].len ;
-					outed=1 ;
+			for (int i=1 ;i<=cntRow ;i++ ){
+				for (int j=1 ;j<=cntCol ;j++ ){
+					fout <<"  " ;
+					if ( Row[i][j]==empty  )
+						fout <<"X" ;
+					else if ( Row[i][j]==full )
+						fout <<"O" ;
+					else 
+						fout <<" " ;
 				}
-				else {
-					fout << "   " ;
+				for (auto r : Row[i].left_most ){
+					fout << "|" << setw(3) << r.len <<" " ;
 				}
+				fout <<endl ;
 			}
-			fout <<endl ;
+			
+			for (int i=1 ;i<=cntCol ;i++ ) fout << "  _" ; fout <<endl ;
 
-			if (outed==0)break ;
-		}
-		fout <<"LinePutToLimit : " << Record.LinePutToLimit <<endl ;
-		fout <<"AllPutToLimit : " << Record.AllPutToLimit <<endl ;
-		fout <<"GridOK : " << GridOK() <<endl ;
-	}
+				for (int i=0 ; ;i++ ){
+					bool outed=0 ;
+					for (int j=1 ;j<=cntCol ;j++ ){
+						if ((int)Col[j].left_most.size()>i ){
+							fout << setw(3) << Col[j].left_most[i].len ;
+							outed=1 ;
+						}
+						else {
+							fout << "   " ;
+						}
+					}
+					fout <<endl ;
 
-	bool finish(){
-		for (int i=1 ;i<=cntRow ;i++ ){
-			for (int j=1 ;j<=cntCol ;j++ ){
-				if (Row[i][j]==unknown)return 0 ;
+					if (outed==0)break ;
+				}
+				fout <<"LinePutToLimit : " << Record.LinePutToLimit <<endl ;
+				fout <<"AllPutToLimit : " << Record.AllPutToLimit <<endl ;
+				fout <<"GridOK : " << GridOK() <<endl ;
 			}
-		}
-		return 1 ;
-	}
 
-	bool ans_outed ;
-	void Solve(){
-		if (ans_outed)return ;
-		LogicSolve() ;
-		if (!GridOK())return ;
-		
-		if (finish()){
-			output() ;
-			cout << "finish" <<endl ;
-			ans_outed=1 ;
-			return ;
-		}
-
-		//output() ;
-		for (int i=1 ;i<=cntRow ;i++ ){
-			for (int j=1 ;j<=cntCol ;j++ ){
-				if (Row[i][j]==unknown){
-					NonogramSolver A = *this ;
-					A.Row[i][j]=full ;
-					A.Solve() ;
-
-					if (A.ans_outed==1){
-						ans_outed=1 ;
-						return ;
+			bool finish(){
+				for (int i=1 ;i<=cntRow ;i++ ){
+					for (int j=1 ;j<=cntCol ;j++ ){
+						if (Row[i][j]==unknown)return 0 ;
 					}
-					A = *this ;
-					A.Row[i][j]=empty ;
-					A.Solve() ;
-					if (A.ans_outed==1){
-						ans_outed=1 ;
-						return ;
-					}
+				}
+				return 1 ;
+			}
+
+			bool ans_outed ;
+			void Solve(){
+				if (ans_outed)return ;
+				LogicSolve() ;
+				if (!GridOK())return ;
+				
+				if (finish()){
+					output() ;
+					cout << "finish" <<endl ;
+					ans_outed=1 ;
 					return ;
 				}
+
+		//output() ;
+				for (int i=1 ;i<=cntRow ;i++ ){
+					for (int j=1 ;j<=cntCol ;j++ ){
+						if (Row[i][j]==unknown){
+							NonogramSolver A = *this ;
+							A.Row[i][j]=full ;
+							A.Solve() ;
+
+							if (A.ans_outed==1){
+								ans_outed=1 ;
+								return ;
+							}
+							A = *this ;
+							A.Row[i][j]=empty ;
+							A.Solve() ;
+							if (A.ans_outed==1){
+								ans_outed=1 ;
+								return ;
+							}
+							return ;
+						}
+					}
+				}
 			}
-		}
-	}
-};
+		};
 
 #endif

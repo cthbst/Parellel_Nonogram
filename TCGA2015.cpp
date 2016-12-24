@@ -1,11 +1,11 @@
 #include "NonogramSolver.h"
 
 int main(){
-	ifstream fin("Input/tcga2015-question.txt") ;
+	ifstream fin("Input/sample_in.txt") ;
 
 	clock_t start = clock() ;
 
-	for (int i=1 ;i<=1000 ;i++ ){
+	for (int i=1 ;i<=1 ;i++ ){
 		string name ;
 		getline(fin,name) ;
 

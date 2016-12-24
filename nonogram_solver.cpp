@@ -7,7 +7,7 @@ int main(){
 	//Game.input("sample_in_2.txt") ; 
 	//Game.input("tcga2015-question.txt") ;
 
-	ifstream TCGA2015("tcga2015-question.txt") ;
+	ifstream TCGA2015("./Input/tcga2015-question.txt") ;
 	for (int i=1 ;i<=1000 ;i++ ){		
 		string QuestionNum ;
 		getline(TCGA2015,QuestionNum) ;
