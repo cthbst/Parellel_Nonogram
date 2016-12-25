@@ -24,38 +24,41 @@ struct Range
 	int cntBlack ,len ;
 };
 
+struct Record_type 
+{
+	Record_type();
+	int LinePutToLimit ;
+	int AllPutToLimit ;
+};
+
+
+template<int length>struct Line 
+{
+	vector<Range> left_most ,right_most ;
+	Line();
+
+
+	State line[length+2];
+	State& operator [] (const int id);
+
+	void init();
+	void intersection();
+	void getCntBlack(Range &rang);
+	bool rangeOK(Range rang);
+	void putToLimit();
+
+	bool LineOK();
+
+};
+
+#include "Line.tpp"
 
 
 template<int cntRow ,int cntCol > struct NonogramSolver
 {
-	struct Record_type 
-	{
-		Record_type();
-		int LinePutToLimit ;
-		int AllPutToLimit ;
-	} ;
+	
 
 	Record_type Record ;
-
-	template<int length>struct Line 
-	{
-		vector<Range> left_most ,right_most ;
-		Line();
-
-
-		State line[length+2];
-		State& operator [] (const int id);
-
-		void init();
-		void intersection();
-		void getCntBlack(Range &rang);
-		bool rangeOK(Range rang);
-		void putToLimit();
-
-		bool LineOK();
-
-	};
-
 	Line<cntRow> Col[cntCol+2] ;
 	Line<cntCol> Row[cntRow+2] ;
 
@@ -65,7 +68,10 @@ template<int cntRow ,int cntCol > struct NonogramSolver
 	void LogicSolve();
 	bool Union();
 	bool intersection();
-					template<int ll>void inputRanges(ifstream &fin ,Line<ll> line[] ,int cntLine );
+	
+	template<int ll> 
+	void inputRanges(ifstream &fin ,Line<ll> line[] ,int cntLine );
+
 	void input(string filename);
 	void input(ifstream &fin );
 
@@ -77,6 +83,6 @@ template<int cntRow ,int cntCol > struct NonogramSolver
 	void Solve();
 };
 
-#include "NonogramSolver.hpp"
+#include "NonogramSolver.tpp"
 
 #endif
