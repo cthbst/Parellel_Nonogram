@@ -61,10 +61,9 @@ template<int cntRow ,int cntCol > struct NonogramSolver
 	Record_type Record ;
 	Line<cntRow> Col[cntCol+2] ;
 	Line<cntCol> Row[cntRow+2] ;
-
 	bool GridOK();
-	void init();
-	void putToLimit();
+	void init(); 
+	void putToLimit(); //p
 	void LogicSolve();
 	bool Union();
 	bool intersection();

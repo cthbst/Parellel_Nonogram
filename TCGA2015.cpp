@@ -2,6 +2,8 @@
 
 using namespace std;
 
+#define size 25
+
 int main(){
 	ifstream fin("Input/sample_in.txt") ;
 
@@ -12,7 +14,7 @@ int main(){
 		getline(fin,name) ;
 
 		cout <<setw(4)<< i << " " ;
-		NonogramSolver<25,25> Game ;
+		NonogramSolver<size,size> Game ;
 		Game.input(fin) ;
 		Game.Solve() ;
 		cout << "\t" << (clock()-start)/(double)CLOCKS_PER_SEC <<" s" <<endl ;

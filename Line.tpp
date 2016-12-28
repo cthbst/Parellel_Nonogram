@@ -46,11 +46,10 @@ void Line<length>::init()
 template<int length>
 void Line<length>::intersection()
 {
+	const auto &ls = left_most ;
+	const auto &rs = right_most ;
 	for (int i=0 ;i<(int)left_most.size() ;i++ )
 	{
-		auto &ls = left_most ;
-		auto &rs = right_most ;
-
 		if (ls[i].L<=rs[i].L && ls[i].R>rs[i].L )
 		{
 			for (int j=rs[i].L ; j<ls[i].R ;j++ )
@@ -61,8 +60,8 @@ void Line<length>::intersection()
 	}
 	bool cover[length+2] ;
 	memset(cover,0,sizeof(cover)) ;
-	auto &ls = left_most ;
-	auto &rs = right_most ;
+	// const auto &ls = left_most ;
+	// auto &rs = right_most ;
 	for (int i=0 ;i<(int)left_most.size() ;i++ )
 	{
 		for (int j=ls[i].L ;j<rs[i].R ;j++ )
@@ -101,7 +100,7 @@ bool Line<length>::rangeOK(Range rang)
 template<int length>
 void Line<length>::putToLimit()
 {
-	int n = left_most.size() ;
+	const int n = left_most.size() ;
 
 	{
 		auto &ls = left_most ;
