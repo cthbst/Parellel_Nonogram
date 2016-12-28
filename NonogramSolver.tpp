@@ -9,7 +9,7 @@
 
 #include <omp.h>
 
-#define tnum 4
+#define tnum 1
 //#include "NonogramSolver.h"
 using namespace std ;
 
@@ -35,12 +35,11 @@ bool NonogramSolver<cntRow,cntCol>::GridOK()
 template<int cntRow ,int cntCol > 
 void NonogramSolver<cntRow,cntCol>::init()
 {
-		//memset(Record,0,sizoeof(Record)) ;
 	ans_outed=0 ;
-	#pragma omp parallel for num_threads(tnum)
+	//#pragma omp parallel for num_threads(tnum)
 	for (int i=1 ;i<=cntCol ;i++ )
 		Col[i].init() ;
-	#pragma omp parallel for num_threads(tnum)
+	//#pragma omp parallel for num_threads(tnum)
 	for (int i=1 ;i<=cntRow ;i++ )
 		Row[i].init() ;
 }
@@ -51,7 +50,7 @@ void NonogramSolver<cntRow,cntCol>::putToLimit()
 	Record.AllPutToLimit++ ;
 	//l_count++;
 	int i;
-	#pragma omp parallel for schedule(auto) num_threads(tnum) private(i)
+	//#pragma omp parallel for schedule(auto) num_threads(tnum) private(i)
 	for (i=1 ;i<=cntCol ;i++ ){
 		Col[i].putToLimit() ;
 		Row[i].putToLimit() ;
@@ -208,7 +207,7 @@ void NonogramSolver<cntRow,cntCol>::Solve(){
 	if (ans_outed)
 		return ;
 
-	LogicSolve() ; // p
+	LogicSolve() ;
 
 	if (!GridOK())
 		return ;
@@ -221,8 +220,6 @@ void NonogramSolver<cntRow,cntCol>::Solve(){
 		return ;
 	}
 
-		//output() ;
-	//need p
 	for (int i=1 ;i<=cntRow ;i++ ){
 		for (int j=1 ;j<=cntCol ;j++ ){
 			if (Row[i][j]==unknown){
@@ -239,7 +236,7 @@ void NonogramSolver<cntRow,cntCol>::Solve(){
 				A.Row[i][j]=empty ;
 				A.Solve() ;
 				l_count++;
-				
+
 				if (A.ans_outed==1){
 					ans_outed=1 ;
 					return ;
