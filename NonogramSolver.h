@@ -8,6 +8,7 @@
 #include <string.h>
 #include <iomanip>
 #include <stack>
+#include <pthread.h>
 
 
 using namespace std;
@@ -18,7 +19,9 @@ const State empty = 2 ;
 const State full = 1 ;
 const State unknown = 0 ;
 
-
+void mu_init();
+void mu_des();
+void p_outans();
 
 
 struct Range 
@@ -35,7 +38,7 @@ struct Record_type
 	int AllPutToLimit ;
 };
 
-void unrecursive_solver();
+void* unrecursive_solver(void*);
 
 
 template<int length>struct Line 
