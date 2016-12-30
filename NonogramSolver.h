@@ -7,6 +7,8 @@
 #include <fstream>
 #include <string.h>
 #include <iomanip>
+#include <stack>
+
 
 using namespace std;
 
@@ -15,6 +17,8 @@ typedef char State ;
 const State empty = 2 ;
 const State full = 1 ;
 const State unknown = 0 ;
+
+
 
 
 struct Range 
@@ -30,6 +34,8 @@ struct Record_type
 	int LinePutToLimit ;
 	int AllPutToLimit ;
 };
+
+void unrecursive_solver();
 
 
 template<int length>struct Line 
@@ -83,5 +89,13 @@ template<int cntRow ,int cntCol > struct NonogramSolver
 };
 
 #include "NonogramSolver.tpp"
+
+
+
+void push_stk(NonogramSolver<25,25> A);
+
+
+
+
 
 #endif

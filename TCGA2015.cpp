@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define size 25
+#define nsize 25
 
 int main(){
 	ifstream fin("Input/sample_in.txt") ;
@@ -14,9 +14,14 @@ int main(){
 		getline(fin,name) ;
 
 		cout <<setw(4)<< i << " " ;
-		NonogramSolver<size,size> Game ;
+		NonogramSolver<nsize,nsize> Game ;
 		Game.input(fin) ;
-		Game.Solve() ;
+		//Game.Solve() ;
+		Game.output();
+		push_stk(Game);
+		//printf("%d\n",stk_nono.size());
+
+		unrecursive_solver();
 		cout << "\t" << (clock()-start)/(double)CLOCKS_PER_SEC <<" s" <<endl ;
 	}
 }

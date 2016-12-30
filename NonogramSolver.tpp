@@ -6,12 +6,13 @@
 #include <fstream>
 #include <string.h>
 #include <iomanip>
+#include <stack>
 
 #include <omp.h>
 
 #define tnum 4
 //#include "NonogramSolver.h"
-using namespace std ;
+using namespace std;
 
 typedef char State ;
 // const State empty = 2 ;
@@ -20,7 +21,7 @@ typedef char State ;
 
 static int l_count =0;
 
-
+//stack<NonogramSolver> stk_nono;
 
 template<int cntRow ,int cntCol > 
 bool NonogramSolver<cntRow,cntCol>::GridOK()
@@ -37,10 +38,9 @@ void NonogramSolver<cntRow,cntCol>::init()
 {
 		//memset(Record,0,sizoeof(Record)) ;
 	ans_outed=0 ;
-	#pragma omp parallel for num_threads(tnum)
 	for (int i=1 ;i<=cntCol ;i++ )
 		Col[i].init() ;
-	#pragma omp parallel for num_threads(tnum)
+
 	for (int i=1 ;i<=cntRow ;i++ )
 		Row[i].init() ;
 }
@@ -51,7 +51,7 @@ void NonogramSolver<cntRow,cntCol>::putToLimit()
 	Record.AllPutToLimit++ ;
 	//l_count++;
 	int i;
-	#pragma omp parallel for schedule(auto) num_threads(tnum) private(i)
+
 	for (i=1 ;i<=cntCol ;i++ ){
 		Col[i].putToLimit() ;
 		Row[i].putToLimit() ;
@@ -205,6 +205,21 @@ bool NonogramSolver<cntRow,cntCol>::finish()
 
 template<int cntRow ,int cntCol > 
 void NonogramSolver<cntRow,cntCol>::Solve(){
+
+
+	// while (!stk_nono.empty())
+	// {
+	// 	NonogramSolver solverA=stk_nono.top();
+	// 	stk_nono.pop();
+
+	// 	if(solverA.ans_outed)
+	// 	{
+
+	// 	}
+	// 	solverA.Solve();
+
+	// }
+
 	if (ans_outed)
 		return ;
 
@@ -223,7 +238,7 @@ void NonogramSolver<cntRow,cntCol>::Solve(){
 
 		//output() ;
 	//need p
-	for (int i=1 ;i<=cntRow ;i++ ){
+	for (int i=1 ;i<=cntRow;i++ ){
 		for (int j=1 ;j<=cntCol ;j++ ){
 			if (Row[i][j]==unknown){
 				NonogramSolver A = *this ;
