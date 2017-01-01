@@ -16,18 +16,18 @@ typedef char State ;
 // const State unknown = 0 ;
 
 stack< NonogramSolver<25,25> > stk_nono;
-pthread_mutex_t mutex;
-pthread_mutex_t mu_check;
+pthread_mutex_t mu_take;
+pthread_mutex_t mu_push;
 
 void mu_init()
 {
-	pthread_mutex_init(&mutex,NULL);
-	pthread_mutex_init(&mu_check,NULL);
+	pthread_mutex_init(&mu_take,NULL);
+	pthread_mutex_init(&mu_push,NULL);
 }
 void mu_des()
 {
-	pthread_mutex_destroy(&mutex);
-	pthread_mutex_destroy(&mu_check);
+	pthread_mutex_destroy(&mu_take);
+	pthread_mutex_destroy(&mu_push);
 }
 
 void push_stk(NonogramSolver<25,25> A)
@@ -54,6 +54,8 @@ void p_outans()
 	outans.output();
 }
 
+
+
 void* unrecursive_solver(void*)
 {
 	int is_empty;
@@ -62,14 +64,17 @@ void* unrecursive_solver(void*)
 	restart:
 
 	//不用繼續就跳掉
+	pthread_mutex_lock(&mu_take);
 	if(!is_conti)
 	{
 		return NULL;
 	}
+	pthread_mutex_unlock(&mu_take);
 
 	//如果堆疊空 等到堆疊不空為止
 	//否則取物件 
 	//一次只有一個人
+	pthread_mutex_lock(&mu_take);
 	reempty:
 	if(stk_nono.empty())
 	{	
