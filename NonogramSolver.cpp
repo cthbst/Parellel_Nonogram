@@ -22,6 +22,15 @@ pthread_mutex_t mu_empt;
 pthread_mutex_t mu_busy;
 int cnt_busy;
 
+int thread_n=4;
+void set_thread_n(int _n){
+	thread_n = _n;
+}
+
+int get_thread_n(){
+	return thread_n;
+}
+
 void mu_init()
 {
 	pthread_mutex_init(&mu_take,NULL);
