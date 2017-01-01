@@ -5,7 +5,7 @@ using namespace std;
 
 #define nsize 25
 
-#define thread_n 4
+#define thread_n 8
 
 
 
@@ -44,7 +44,7 @@ int main(){
 			pthread_join(handles[t],NULL);
 		}
 
-		//p_outans();
+		p_outans();
 		//unrecursive_solver();
 		//cout << "\t" << (clock()-start)/(double)CLOCKS_PER_SEC <<" s" <<endl ;
 	}
