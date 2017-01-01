@@ -10,14 +10,20 @@ using namespace std;
 
 
 
-int main(){
-	ifstream fin("Input/sample_NoSolution.txt") ;
+int main(int argc, char **argv){
+	if (argc!=3){
+		printf("%d\n",argc);
+		puts("need 2 argv");
+		return 0;
+	}
+	set_thread_n( strtol(argv[2],NULL,10) );
+	ifstream fin(argv[1]) ;
 	//ifstream fin("Input/sample_in.txt") ;
 
 	clock_t start = clock() ;
 
 	pthread_t* handles=NULL;
-	handles=(pthread_t*)malloc(thread_n * sizeof(pthread_t) );
+	handles=(pthread_t*)malloc(get_thread_n() * sizeof(pthread_t) );
 
 	mu_init();
 	int rank[100];
@@ -36,14 +42,14 @@ int main(){
 
 		elapsed_time();
 
-		for(int t=0;t<thread_n;t++)
+		for(int t=0;t<get_thread_n();t++)
 		{
 			//printf("%d\n",t);
 			rank[t]=t;
 			pthread_create(&handles[t],NULL,unrecursive_solver,&rank[t]);
 		}
 
-		for(int t=0;t<thread_n;t++)
+		for(int t=0;t<get_thread_n();t++)
 		{
 			pthread_join(handles[t],NULL);
 		}

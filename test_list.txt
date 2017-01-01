@@ -1,0 +1,31 @@
+硬體環境
+作業系統
+
+thread 數
+時間
+測試次數
+時間標準差
+best case
+worse case
+
+各100次
+
+sample_in: // 時間不穩定
+第一次的爛方法的結果
+1 2 4 thread
+
+手動 stack 的結果
+1 2 4 8 16 32 64 128 thread
+
+單邊 push 的結果
+1 2 4 8 16 32 64 128 thread
+
+sample_NoSolution: // 時間較穩定
+第一次的爛方法的結果
+1 2 4 thread 100次
+
+手動 stack 的結果
+1 2 4 8 16 32 thread
+
+單邊 push 的結果
+1 2 4 8 16 32 thread

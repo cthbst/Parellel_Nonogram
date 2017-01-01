@@ -22,6 +22,15 @@ pthread_mutex_t mu_empt;
 pthread_mutex_t mu_busy;
 int cnt_busy;
 
+int thread_n=4;
+void set_thread_n(int _n){
+	thread_n = _n;
+}
+
+int get_thread_n(){
+	return thread_n;
+}
+
 void mu_init()
 {
 	pthread_mutex_init(&mu_take,NULL);
@@ -99,7 +108,7 @@ void* unrecursive_solver(void* a)
 	if(stk_nono.empty())
 	{	
 		pthread_mutex_lock(&mu_busy);				// mutex mu_busy lock
-		if (cnt_busy==thread_n){
+		if (cnt_busy==get_thread_n()){
 			pthread_mutex_unlock(&mu_busy);			// mutex mu_busy unlock
 			pthread_mutex_unlock(&mu_empt);			// mutex mu_empt unlock
 			return NULL;

@@ -13,7 +13,8 @@
 
 using namespace std;
 
-#define thread_n 1
+void set_thread_n(int);
+int get_thread_n();
 
 typedef char State ;
 const State empty = 2 ;
