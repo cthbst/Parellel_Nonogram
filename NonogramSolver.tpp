@@ -49,18 +49,14 @@ template<int cntRow ,int cntCol >
 void NonogramSolver<cntRow,cntCol>::putToLimit()
 {
 	Record.AllPutToLimit++ ;
-	//l_count++;
 	int i;
+
 	#pragma omp parallel for schedule(auto) num_threads(tnum) private(i)
 	for (i=1 ;i<=cntCol ;i++ ){
 		Col[i].putToLimit() ;
 		Row[i].putToLimit() ;
 	}
 
-	/*#pragma omp parallel for  num_threads(tnum) private(i)
-	for (i=1 ;i<=cntRow ;i++ )
-		Row[i].putToLimit() ;
-		*/
 }
 
 template<int cntRow ,int cntCol > 
@@ -75,17 +71,7 @@ template<int cntRow ,int cntCol >
 bool NonogramSolver<cntRow,cntCol>::Union()
 {
 	bool Updated=0;
-/*
-	for (int i=1; i<=cntRow && !Updated ;i++ ){
-		for (int j=1; j<=cntCol && !Updated ;j++ ){
-			if (Row[i][j]==unknown && Col[j][i]!=unknown ) 
-		 		Updated=1 ;
-		 	if (Col[j][i]==unknown && Row[i][j]!=unknown ) 
-		 		Updated=1 ;
-		}
-	}
-*/	int i,j;
-	//#pragma omp parallel for num_threads(tnum) private(i,j)
+	int i,j;
 	for (i=1; i<=cntRow ;i++ ){
 		for (j=1; j<=cntCol ;j++ ){
 			if (Row[i][j]==unknown && Col[j][i]!=unknown ) 
@@ -101,10 +87,8 @@ template<int cntRow ,int cntCol >
 bool NonogramSolver<cntRow,cntCol>::intersection()
 {
 	int i;
-	//#pragma omp parallel for num_threads(tnum) private(i)
 	for (i=1 ;i<=cntCol ;i++ )
 		Col[i].intersection() ;
-	//#pragma omp parallel for num_threads(tnum) private(i)
 	for (i=1 ;i<=cntRow ;i++ )
 		Row[i].intersection() ;
 	return Union() ;
@@ -208,21 +192,19 @@ void NonogramSolver<cntRow,cntCol>::Solve(){
 	if (ans_outed)
 		return ;
 
-	LogicSolve() ; // p
+	LogicSolve() ; 
 
 	if (!GridOK())
 		return ;
 
 	if (finish()){
-		output() ;
-		cout << "finish" <<endl ;
-		cout << "lcount = " << l_count << endl;
+		//output() ;
+		//cout << "finish" <<endl ;
+		//cout << "lcount = " << l_count << endl;
 		ans_outed=1 ;
 		return ;
 	}
 
-		//output() ;
-	//need p
 	for (int i=1 ;i<=cntRow ;i++ ){
 		for (int j=1 ;j<=cntCol ;j++ ){
 			if (Row[i][j]==unknown){

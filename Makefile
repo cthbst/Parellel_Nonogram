@@ -1,7 +1,7 @@
 
 
 TCGA2015: TCGA2015.o NonogramSolver.o
-	g++-6 -fopenmp -std=c++11 -o TCGA2015.out TCGA2015.o NonogramSolver.o
+	g++-6 -fopenmp -std=c++11 -o ../speedtest/TCGA2015v1-4.out TCGA2015.o NonogramSolver.o
 
 TCGA2015.o: TCGA2015.cpp NonogramSolver.h
 	g++-6 -fopenmp -std=c++11 -c TCGA2015.cpp 
