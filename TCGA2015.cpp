@@ -5,12 +5,12 @@ using namespace std;
 
 #define nsize 25
 
-#define thread_n 8
 
 
 
 int main(){
-	ifstream fin("Input/sample_in.txt") ;
+	ifstream fin("Input/sample_NoSolution.txt") ;
+	//ifstream fin("Input/sample_in.txt") ;
 
 	clock_t start = clock() ;
 

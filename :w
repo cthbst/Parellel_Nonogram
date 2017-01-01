@@ -20,7 +20,6 @@ pthread_mutex_t mu_take;
 pthread_mutex_t mu_push;
 pthread_mutex_t mu_empt;
 pthread_mutex_t mu_busy;
-int cnt_busy;
 
 void mu_init()
 {
@@ -28,7 +27,6 @@ void mu_init()
 	pthread_mutex_init(&mu_push,NULL);
 	pthread_mutex_init(&mu_empt,NULL);
 	pthread_mutex_init(&mu_busy,NULL);
-	cnt_busy=0;
 }
 void mu_des()
 {
@@ -73,6 +71,7 @@ void* unrecursive_solver(void* a)
 {
 	int* rank=(int*)a;
 	int is_empty;
+
 	NonogramSolver<25,25> solverA;
 
 	restart:
@@ -90,29 +89,19 @@ void* unrecursive_solver(void* a)
 	//如果堆疊空 等到堆疊不空為止
 	//否則取物件 
 	//一次只有一個人
-	pthread_mutex_lock(&mu_busy);					// mutex mu_busy lock
-	cnt_busy++;
-	pthread_mutex_unlock(&mu_busy);					// mutex mu_busy unlock
 	pthread_mutex_lock(&mu_empt);					// mutex mu_empt lock
+	pthread_mutex_lock(&mu_busy);					// mutex mu_busy lock
+
+	if ()
 
 	reempty:
 	if(stk_nono.empty())
 	{	
-		pthread_mutex_lock(&mu_busy);				// mutex mu_busy lock
-		if (cnt_busy==thread_n){
-			pthread_mutex_unlock(&mu_busy);			// mutex mu_busy unlock
-			pthread_mutex_unlock(&mu_empt);			// mutex mu_empt unlock
-			return NULL;
-		}
-		pthread_mutex_unlock(&mu_busy);				// mutex mu_busy unlock
 		goto reempty;
 	}
 	else
 	{
 		pthread_mutex_lock(&mu_push);				// mutex mu_push lock
-		pthread_mutex_lock(&mu_busy);				// mutex mu_busy lock
-		cnt_busy--;
-		pthread_mutex_unlock(&mu_busy);				// mutex mu_busy unlock
 		solverA=stk_nono.top();
 		stk_nono.pop();	
 		pthread_mutex_unlock(&mu_push);				// mutex mu_push unlock
