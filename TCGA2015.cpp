@@ -1,5 +1,7 @@
 #include "NonogramSolver.h"
+#include "lib.hpp"
 #include <pthread.h>
+
 
 using namespace std;
 
@@ -32,6 +34,8 @@ int main(){
 		push_stk(Game);
 		//printf("%d\n",stk_nono.size());
 
+		elapsed_time();
+
 		for(int t=0;t<thread_n;t++)
 		{
 			//printf("%d\n",t);
@@ -44,7 +48,9 @@ int main(){
 			pthread_join(handles[t],NULL);
 		}
 
-		p_outans();
+		cout << "time:" <<elapsed_time(0)<<endl;
+
+		//p_outans();
 		//unrecursive_solver();
 		//cout << "\t" << (clock()-start)/(double)CLOCKS_PER_SEC <<" s" <<endl ;
 	}
