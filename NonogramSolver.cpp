@@ -65,6 +65,7 @@ void* unrecursive_solver(void*)
 		//printf("aa\n");
 		if(check)
 		{	
+			puts("Error should not show this!!")
 			pthread_mutex_unlock(&mutex);
 			goto restart;
 		}
@@ -74,10 +75,19 @@ void* unrecursive_solver(void*)
 		//pthread_mutex_lock(&mutex);
 		NonogramSolver<25,25> solverA=stk_nono.top();
 		stk_nono.pop();
-		pthread_mutex_unlock(&mutex);
+		int have_lock = 0;
+		if (stk.nono.empty()){
+			have_lock=1;
+		}
+		else {
+			pthread_mutex_unlock(&mutex);
+		}
 
 		if(solverA.ans_outed)
 		{
+			if (have_lock){
+				pthread_mutex_unlock(&mutex);
+			}
 			goto restart;
 		}
 
@@ -85,6 +95,9 @@ void* unrecursive_solver(void*)
 
 		if(!solverA.GridOK())
 		{
+			if (have_lock){
+				pthread_mutex_unlock(&mutex);
+			}
 			goto restart;
 		}
 
@@ -93,7 +106,10 @@ void* unrecursive_solver(void*)
 		{
 			is_conti=0;
 
-			pthread_mutex_lock(&mutex);
+			
+			if (!have_lock){
+				pthread_mutex_lock(&mutex);
+			}
 			outans=solverA;
 			while(!stk_nono.empty())
 			{
@@ -111,8 +127,9 @@ void* unrecursive_solver(void*)
 		for (int i=1 ;i<=25 ;i++ ){
 			for (int j=1 ;j<=25 ;j++ ){
 				if (solverA.Row[i][j]==unknown){
-
-					pthread_mutex_lock(&mutex);
+					if (!have_lock){
+						pthread_mutex_lock(&mutex);
+					}
 					solverA.Row[i][j]=full;
 					stk_nono.push(solverA);
 
@@ -125,11 +142,11 @@ void* unrecursive_solver(void*)
 			}
 		}
 
-		pthread_mutex_lock(&mutex);
+		if (!have_lock){
+			pthread_mutex_lock(&mutex);
+		}
 		check=stk_nono.empty();
 		pthread_mutex_unlock(&mutex);
-
-
 	}
 	
 
