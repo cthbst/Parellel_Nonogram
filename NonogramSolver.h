@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define thread_n 1
+#define thread_n 2
 
 typedef char State ;
 const State empty = 2 ;

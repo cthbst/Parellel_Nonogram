@@ -119,6 +119,8 @@ void* unrecursive_solver(void* a)
 	}
 	pthread_mutex_unlock(&mu_empt);					// mutex mu_empt unlock
 	
+	reduce_restart:
+
 	//不知道幹嘛 反正就回去
 	if(solverA.ans_outed)
 	{
@@ -161,14 +163,16 @@ void* unrecursive_solver(void* a)
 
 				//猜測黑白 丟到堆疊做
 				pthread_mutex_lock(&mu_push);		// mutex mu_push lock
-				solverA.Row[i][j]=full;
-				stk_nono.push(solverA);
+//				solverA.Row[i][j]=full;
+//				stk_nono.push(solverA);
 
 				solverA.Row[i][j]=empty;
 				stk_nono.push(solverA);
+				
+				solverA.Row[i][j]=full;
 				pthread_mutex_unlock(&mu_push);		// mutex mu_push unlock
 
-				goto restart;
+				goto reduce_restart;
 			}
 		}
 	}
