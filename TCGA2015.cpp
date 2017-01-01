@@ -5,7 +5,9 @@ using namespace std;
 
 #define nsize 25
 
-#define thread_n 8
+#define thread_n 4
+
+
 
 int main(){
 	ifstream fin("Input/sample_in.txt") ;
@@ -16,12 +18,13 @@ int main(){
 	handles=(pthread_t*)malloc(thread_n * sizeof(pthread_t) );
 
 	mu_init();
+	int rank[100];
 	for (int i=1 ;i<=1 ;i++ ){
 		
 		string name ;
 		getline(fin,name) ;
 
-		cout <<setw(4)<< i << " " ;
+		//cout <<setw(4)<< i << " " ;
 		NonogramSolver<nsize,nsize> Game ;
 		Game.input(fin) ;
 		//Game.Solve() ;
@@ -31,7 +34,9 @@ int main(){
 
 		for(int t=0;t<thread_n;t++)
 		{
-			pthread_create(&handles[t],NULL,unrecursive_solver,NULL);
+			//printf("%d\n",t);
+			rank[t]=t;
+			pthread_create(&handles[t],NULL,unrecursive_solver,&rank[t]);
 		}
 
 		for(int t=0;t<thread_n;t++)

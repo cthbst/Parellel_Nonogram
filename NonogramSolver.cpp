@@ -18,16 +18,19 @@ typedef char State ;
 stack< NonogramSolver<25,25> > stk_nono;
 pthread_mutex_t mu_take;
 pthread_mutex_t mu_push;
+pthread_mutex_t mu_empt;
 
 void mu_init()
 {
 	pthread_mutex_init(&mu_take,NULL);
 	pthread_mutex_init(&mu_push,NULL);
+	pthread_mutex_init(&mu_empt,NULL);
 }
 void mu_des()
 {
 	pthread_mutex_destroy(&mu_take);
 	pthread_mutex_destroy(&mu_push);
+	pthread_mutex_destroy(&mu_empt);
 }
 
 void push_stk(NonogramSolver<25,25> A)
@@ -56,17 +59,21 @@ void p_outans()
 
 
 
-void* unrecursive_solver(void*)
+void* unrecursive_solver(void* a)
 {
+	int* rank=(int*)a;
 	int is_empty;
-	NonogramSolver<25,25> solverA
+
+	NonogramSolver<25,25> solverA;
 
 	restart:
 
 	//不用繼續就跳掉
 	pthread_mutex_lock(&mu_take);
+	
 	if(!is_conti)
 	{
+		pthread_mutex_unlock(&mu_take);
 		return NULL;
 	}
 	pthread_mutex_unlock(&mu_take);
@@ -74,7 +81,7 @@ void* unrecursive_solver(void*)
 	//如果堆疊空 等到堆疊不空為止
 	//否則取物件 
 	//一次只有一個人
-	pthread_mutex_lock(&mu_take);
+	pthread_mutex_lock(&mu_empt);
 	reempty:
 	if(stk_nono.empty())
 	{	
@@ -82,9 +89,12 @@ void* unrecursive_solver(void*)
 	}
 	else
 	{
+		pthread_mutex_lock(&mu_push);
 		solverA=stk_nono.top();
 		stk_nono.pop();	
+		pthread_mutex_unlock(&mu_push);
 	}
+	pthread_mutex_unlock(&mu_empt);
 	
 	//不知道幹嘛 反正就回去
 	if(solverA.ans_outed)
@@ -106,14 +116,16 @@ void* unrecursive_solver(void*)
 	if(solverA.finish())
 	{
 		//不用繼續跑了 輸出答案
+		pthread_mutex_lock(&mu_take);
 		is_conti=0;
 		outans=solverA;
+		pthread_mutex_unlock(&mu_take);
 
 		//清空堆疊 或許不用
-		while(!stk_nono.empty())
-		{
-			stk_nono.pop();
-		}
+		// while(!stk_nono.empty())
+		// {
+		// 	stk_nono.pop();
+		// }
 
 		return NULL;
 	}
@@ -124,11 +136,13 @@ void* unrecursive_solver(void*)
 			if (solverA.Row[i][j]==unknown){
 
 				//猜測黑白 丟到堆疊做
+				pthread_mutex_lock(&mu_push);
 				solverA.Row[i][j]=full;
 				stk_nono.push(solverA);
 
 				solverA.Row[i][j]=empty;
 				stk_nono.push(solverA);
+				pthread_mutex_unlock(&mu_push);
 
 				goto restart;
 			}
