@@ -57,88 +57,73 @@ void p_outans()
 void* unrecursive_solver(void*)
 {
 	int is_empty;
+	NonogramSolver<25,25> solverA
 
 	restart:
 
-	pthread_mutex_lock(&mutex);
+	//不用繼續就跳掉
+	if(!is_conti)
 	{
-		is_empty=stk_nono.empty();
+		return NULL;
 	}
-	pthread_mutex_unlock(&mutex);
 
-
-	pthread_mutex_lock(&mu_check);
-	{
-		if(!is_conti)
-		{
-			pthread_mutex_unlock(&mu_check);
-			return NULL;
-		}
-	}
-	pthread_mutex_unlock(&mu_check);
-
-
-	if(is_empty)
+	//如果堆疊空 等到堆疊不空為止
+	//否則取物件 
+	//一次只有一個人
+	reempty:
+	if(stk_nono.empty())
 	{	
-		goto restart;
+		goto reempty;
 	}
-
-	pthread_mutex_lock(&mutex);
+	else
+	{
+		solverA=stk_nono.top();
+		stk_nono.pop();	
+	}
 	
-	NonogramSolver<25,25> solverA=stk_nono.top();
-	stk_nono.pop();
-	
-	pthread_mutex_unlock(&mutex);
-
-
+	//不知道幹嘛 反正就回去
 	if(solverA.ans_outed)
 	{
 		goto restart;
 	}
 
+	//解答案
 	solverA.LogicSolve();
 
+	//可能是解錯？ 回去
 	if(!solverA.GridOK())
 	{
 		goto restart;
 	}
 
 		// need tag for finish !!!!
+	//如果有答案了
 	if(solverA.finish())
 	{
-		pthread_mutex_lock(&mu_check);
-		{
-			is_conti=0;
-			outans=solverA;
-		}
-		pthread_mutex_unlock(&mu_check);
+		//不用繼續跑了 輸出答案
+		is_conti=0;
+		outans=solverA;
 
-		pthread_mutex_lock(&mutex);
+		//清空堆疊 或許不用
+		while(!stk_nono.empty())
 		{
-			while(!stk_nono.empty())
-			{
-				stk_nono.pop();
-			}
+			stk_nono.pop();
 		}
-		pthread_mutex_unlock(&mutex);
 
 		return NULL;
 	}
 
+	//如果有其中一個 unknown
 	for (int i=1 ;i<=25 ;i++ ){
 		for (int j=1 ;j<=25 ;j++ ){
 			if (solverA.Row[i][j]==unknown){
 
+				//猜測黑白 丟到堆疊做
+				solverA.Row[i][j]=full;
+				stk_nono.push(solverA);
 
-				pthread_mutex_lock(&mutex);
-				{
-					solverA.Row[i][j]=full;
-					stk_nono.push(solverA);
-
-					solverA.Row[i][j]=empty;
-					stk_nono.push(solverA);
-				}
-				pthread_mutex_unlock(&mutex);
+				solverA.Row[i][j]=empty;
+				stk_nono.push(solverA);
 
 				goto restart;
 			}
