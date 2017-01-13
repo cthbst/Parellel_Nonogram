@@ -56,7 +56,7 @@ int main(int argc, char **argv){
 
 		cout << "time:" <<elapsed_time(0)<<endl;
 
-		//p_outans();
+		p_outans();
 		//unrecursive_solver();
 		//cout << "\t" << (clock()-start)/(double)CLOCKS_PER_SEC <<" s" <<endl ;
 	}
